@@ -110,6 +110,6 @@ public class Conversions {
     }
 
     public static double degreesToCANSparkMax(double degrees, double angleGearRatio) {
-        return 0.25;//degrees / (360.0 / (angleGearRatio * 4096.0)); //If does not work, leave blank and add TODO
+        return degrees / (360.0 / (angleGearRatio * 42)); //If does not work, leave blank and add TODO
     }
 } 

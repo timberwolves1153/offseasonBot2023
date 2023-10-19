@@ -43,7 +43,7 @@ public class NEOSwerveConstants {
         double angleKFF = 0.0;
  
         boolean driveMotorInvert = false;
-        boolean angleMotorInvert = false;
+        boolean angleMotorInvert = true;
         boolean absoluteEncoderPortsInvert = false;
         return new NEOSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKFF, driveMotorInvert, angleMotorInvert, absoluteEncoderPortsInvert);
     }
