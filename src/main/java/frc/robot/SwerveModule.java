@@ -1,33 +1,23 @@
 package frc.robot;
 
-import javax.swing.text.Position;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.lib.math.Conversions;
 import frc.lib.math.OnBoardModuleState;
 import frc.lib.util.CANSparkMaxUtil;
-import frc.lib.math.OnBoardModuleState;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 
-// import com.ctre.phoenix.motorcontrol.ControlMode;
-// import com.ctre.phoenix.motorcontrol.DemandType;
-// import com.ctre.phoenix.motorcontrol.can.CanSparkMax;
-// import com.ctre.phoenix.sensors.absoluteEncoderPorts;
 
 public class SwerveModule {
     public int moduleNumber;
@@ -97,8 +87,9 @@ public class SwerveModule {
 
     private void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
-        mAngleMotor.set(Conversions.degreesToCANSparkMax(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+        double sparkMaxPosition = Conversions.degreesToCANSparkMax(angle.getDegrees(), Constants.Swerve.angleGearRatio);
+        //mAngleMotor.set(Conversions.degreesToCANSparkMax(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+        mAngleMotor.getPIDController().setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
     }
 
@@ -165,3 +156,4 @@ public class SwerveModule {
 
 
 //Gaffey's cool comment
+//My 2nd comment

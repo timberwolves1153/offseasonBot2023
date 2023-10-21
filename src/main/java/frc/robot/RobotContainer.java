@@ -20,6 +20,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick atari = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -27,11 +28,19 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
+    private final JoystickButton atariJoystickButton2 = new JoystickButton(atari, 2);
+    private final JoystickButton atariJoystickButton3 = new JoystickButton(atari, 3);
+    private final JoystickButton atariJoystickButton7 = new JoystickButton(atari, 7);
+    private final JoystickButton atariJoystickButton8 = new JoystickButton(atari, 8);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Collector collector = new Collector();
+    private final Indexer indexer = new Indexer();
+    private final Launcher launcher = new Launcher();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -40,8 +49,8 @@ public class RobotContainer {
             new TeleopSwerve(
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
-                () -> driver.getRawAxis(strafeAxis), 
-                () -> driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -59,6 +68,26 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.ScoreMiddle()));
+        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+
+        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.ScoreTop()));
+        atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+
+       atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
+       atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
+       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+
+       atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
+       atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+       atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
+       atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+
+       
     }
 
     /**
