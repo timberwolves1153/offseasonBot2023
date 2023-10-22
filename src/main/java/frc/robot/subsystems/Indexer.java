@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class Indexer {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Indexer extends SubsystemBase {
     public CANSparkMax indexer;
 
     public Indexer() {

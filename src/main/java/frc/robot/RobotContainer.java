@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -20,7 +21,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick atari = new Joystick(1);
+    private final Joystick operator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -28,13 +29,15 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kRightStick.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton rightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton leftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton atariJoystickButton2 = new JoystickButton(atari, 2);
-    private final JoystickButton atariJoystickButton3 = new JoystickButton(atari, 3);
-    private final JoystickButton atariJoystickButton7 = new JoystickButton(atari, 7);
-    private final JoystickButton atariJoystickButton8 = new JoystickButton(atari, 8);
+    private final JoystickButton atariJoystickButton2 = new JoystickButton(operator, 2);
+    private final JoystickButton atariJoystickButton3 = new JoystickButton(operator, 3);
+    private final JoystickButton atariJoystickButton7 = new JoystickButton(operator, 7);
+    private final JoystickButton atariJoystickButton8 = new JoystickButton(operator, 8);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -51,7 +54,9 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> robotCentric.getAsBoolean(), 
+                leftBumper,
+                rightBumper
             )
         );
 
@@ -68,21 +73,27 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-
-        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.ScoreMiddle()));
+// to score low, we might just want to poop cubes out of the feeder/indexer
+        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.scoreL2()));
         atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
 
-        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.ScoreTop()));
+        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.scoreL3()));
         atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
 
        atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
        atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
+       atariJoystickButton7.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
+       atariJoystickButton7.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
+    
        atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
        atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
 
        atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
        atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+       atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
+       atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
 
        atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
        atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));

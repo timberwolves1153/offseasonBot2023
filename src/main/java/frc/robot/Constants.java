@@ -13,6 +13,8 @@ import frc.lib.util.NEOSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+
+    public static final boolean collectorTuningMode = false;
     public static final double stickDeadband = 0.1;
 
 
@@ -165,5 +167,23 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+
+    public static final class DeployIntakeConstants {
+        
+    public static final double deployMotorGearRatio = 39.6/1;
+    public static final int ExtensionCurrentLimit = 15;
+    public static final double ExtensionSpeed = 0.25;
+    public static final double RetractionSpeed = -0.25;
+    public static final double HighCurrentMinimumTime = 0.25;
+
+    public static final double smartMotionMaxVelocity = 1000;
+    public static final double smartmotionMaxAccel = 1000;
+    public static final double smartMotionAllowableError = 0.0001;
+
+    //NEEDS TO BE TUNED
+    public static final double extensionPoint = 0;
+
+    
     }
 }
