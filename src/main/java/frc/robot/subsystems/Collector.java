@@ -47,7 +47,7 @@ public class Collector extends SubsystemBase{
     public void collectorIntake() {
         rollerMotor.setVoltage(6);
     }
-    
+
 
     //runs rollers to spit out cubes
     public void collectorOutake() {
@@ -60,17 +60,17 @@ public class Collector extends SubsystemBase{
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
     public void runIntakeDeployForward() {
-        rollerMotor.setVoltage(2);
+        deployMotor.setVoltage(2);//rollerMotor => deployMotor
     }
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
     public void runIntakeDeployBackward() {
-        rollerMotor.setVoltage(-2);
+        deployMotor.setVoltage(-2);//rollerMotor => deployMotor
     }
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
     public void stopIntake() {
-        rollerMotor.setVoltage(0.0);
+        deployMotor.setVoltage(0.0);//rollerMotor => deployMotor
     }
 
     public void setDeployMotorPosition(double position) {

@@ -1,0 +1,108 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.7042348614611758,
+        "y": 1.061982636785786
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.704234861461175,
+        "y": 1.061982636785786
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.728668841953069,
+        "y": 0.9135334509985259
+      },
+      "prevControl": {
+        "x": 6.740088010090551,
+        "y": 0.9135334509985259
+      },
+      "nextControl": {
+        "x": 6.717249673815587,
+        "y": 0.9135334509985259
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.223698428394481,
+        "y": 2.722861312705999
+      },
+      "prevControl": {
+        "x": 6.680334025751187,
+        "y": 2.9799146534160066
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "maxVelocity": 4.0,
+  "maxAcceleration": 3.0,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.0,
+      "names": [
+        "RunLauncherHigh",
+        "RunIndexer"
+      ]
+    },
+    {
+      "position": 0.6836363636363741,
+      "names": [
+        "DeployCollector",
+        "RunIntake",
+        "RunIndexer"
+      ]
+    },
+    {
+      "position": 1.367272727272692,
+      "names": [
+        "RetractCollector",
+        "StopIntake",
+        "LowVoltIndexer"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "RunIndexer",
+        "RunLancher"
+      ]
+    }
+  ]
+}

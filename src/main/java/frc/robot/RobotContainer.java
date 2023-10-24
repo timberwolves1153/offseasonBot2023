@@ -38,6 +38,8 @@ public class RobotContainer {
     private final JoystickButton atariJoystickButton3 = new JoystickButton(operator, 3);
     private final JoystickButton atariJoystickButton7 = new JoystickButton(operator, 7);
     private final JoystickButton atariJoystickButton8 = new JoystickButton(operator, 8);
+    private final JoystickButton atariJoystickButton6 = new JoystickButton(operator, 6);
+    private final JoystickButton atariJoystickButton5 = new JoystickButton(operator, 5);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -83,8 +85,8 @@ public class RobotContainer {
        atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
        atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-       atariJoystickButton7.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
-       atariJoystickButton7.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
+    //    atariJoystickButton7.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
+    //    atariJoystickButton7.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
     
        atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
        atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
@@ -92,11 +94,14 @@ public class RobotContainer {
        atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
        atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-       atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
-       atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
+    //    atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
+    //    atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
 
-       atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+       atariJoystickButton6.onTrue(new InstantCommand(() -> collector.runIntakeDeployForward()));
+       atariJoystickButton6.onFalse(new InstantCommand(() -> collector.stopIntake()));
+
+       atariJoystickButton5.onTrue(new InstantCommand(() -> collector.runIntakeDeployBackward()));
+       atariJoystickButton5.onFalse(new InstantCommand(() -> collector.stopIntake()));
 
        
     }
