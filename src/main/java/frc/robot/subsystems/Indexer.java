@@ -12,6 +12,7 @@ public class Indexer extends SubsystemBase {
         indexer = new CANSparkMax(51, MotorType.kBrushless);
 
         
+        indexer.setInverted(true);
     }
     public void indexerCollect () {
         indexer.setVoltage(6);

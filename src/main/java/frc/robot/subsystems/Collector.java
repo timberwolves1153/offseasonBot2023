@@ -60,7 +60,7 @@ public class Collector extends SubsystemBase{
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
     public void runIntakeDeployForward() {
-        deployMotor.setVoltage(2);//rollerMotor => deployMotor
+        deployMotor.setVoltage(10);//rollerMotor => deployMotor
     }
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
@@ -103,7 +103,7 @@ public class Collector extends SubsystemBase{
 
     public void configDeployMotor() {
         deployMotor.restoreFactoryDefaults();
-        deployMotor.setIdleMode(IdleMode.kBrake);
+        deployMotor.setIdleMode(IdleMode.kCoast);
         deployMotor.setInverted(false);
         deployMotor.setSmartCurrentLimit(DeployIntakeConstants.ExtensionCurrentLimit);
         
@@ -131,7 +131,7 @@ public class Collector extends SubsystemBase{
     public void configRollerMotor() {
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setIdleMode(IdleMode.kCoast);
-        rollerMotor.setInverted(false);
+        rollerMotor.setInverted(true);
         rollerMotor.burnFlash();
     }
 }

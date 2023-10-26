@@ -172,7 +172,7 @@ public final class Constants {
     public static final class DeployIntakeConstants {
         
     public static final double deployMotorGearRatio = 39.6/1;
-    public static final int ExtensionCurrentLimit = 15;
+    public static final int ExtensionCurrentLimit = 40;
     public static final double ExtensionSpeed = 0.25;
     public static final double RetractionSpeed = -0.25;
     public static final double HighCurrentMinimumTime = 0.25;

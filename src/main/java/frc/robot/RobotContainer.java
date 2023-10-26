@@ -94,6 +94,9 @@ public class RobotContainer {
        atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
        atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
+       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerReject()));
+       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+
     //    atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
     //    atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
 
@@ -102,6 +105,7 @@ public class RobotContainer {
 
        atariJoystickButton5.onTrue(new InstantCommand(() -> collector.runIntakeDeployBackward()));
        atariJoystickButton5.onFalse(new InstantCommand(() -> collector.stopIntake()));
+
 
        
     }
