@@ -60,7 +60,7 @@ public class Collector extends SubsystemBase{
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls
     public void runIntakeDeployForward() {
-        deployMotor.setVoltage(10);//rollerMotor => deployMotor
+        deployMotor.setVoltage(2);//rollerMotor => deployMotor
     }
 
     //purpose: to test directionality of deploy motor & see intake move w/ basic controls

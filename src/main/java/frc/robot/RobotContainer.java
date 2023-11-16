@@ -38,8 +38,8 @@ public class RobotContainer {
     private final JoystickButton atariJoystickButton3 = new JoystickButton(operator, 3);
     private final JoystickButton atariJoystickButton7 = new JoystickButton(operator, 7);
     private final JoystickButton atariJoystickButton8 = new JoystickButton(operator, 8);
-    private final JoystickButton atariJoystickButton6 = new JoystickButton(operator, 6);
-    private final JoystickButton atariJoystickButton5 = new JoystickButton(operator, 5);
+    private final JoystickButton atariJoystickButton11 = new JoystickButton(operator, 11);
+    private final JoystickButton atariJoystickButton12 = new JoystickButton(operator, 12);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -100,11 +100,11 @@ public class RobotContainer {
     //    atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
     //    atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
 
-       atariJoystickButton6.onTrue(new InstantCommand(() -> collector.runIntakeDeployForward()));
-       atariJoystickButton6.onFalse(new InstantCommand(() -> collector.stopIntake()));
+       atariJoystickButton12.onTrue(new InstantCommand(() -> collector.runIntakeDeployForward()));
+       atariJoystickButton12.onFalse(new InstantCommand(() -> collector.stopIntake()));
 
-       atariJoystickButton5.onTrue(new InstantCommand(() -> collector.runIntakeDeployBackward()));
-       atariJoystickButton5.onFalse(new InstantCommand(() -> collector.stopIntake()));
+       atariJoystickButton11.onTrue(new InstantCommand(() -> collector.runIntakeDeployBackward()));
+       atariJoystickButton11.onFalse(new InstantCommand(() -> collector.stopIntake()));
 
 
        
