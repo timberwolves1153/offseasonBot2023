@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.autos.*;
+//import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -22,6 +22,7 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
     private final Joystick atari = new Joystick(1);
 
+
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -31,16 +32,17 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton atariJoystickButton2 = new JoystickButton(atari, 2);
-    private final JoystickButton atariJoystickButton3 = new JoystickButton(atari, 3);
-    private final JoystickButton atariJoystickButton7 = new JoystickButton(atari, 7);
-    private final JoystickButton atariJoystickButton8 = new JoystickButton(atari, 8);
+    private final JoystickButton IntakeButton7 = new JoystickButton(atari, 7);//SUBJECT TO CHANGE
+    private final JoystickButton OuttakeButton8 = new JoystickButton(atari, 8);//SUBJECT TO CHANGE
+    private final JoystickButton PivotForward11 = new JoystickButton(atari, 11);//SUBJECT TO CHANGE
+    private final JoystickButton PivotBack12 = new JoystickButton(atari, 12);//SUBJECT TO CHANGE
+
+
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Collector collector = new Collector();
-    private final Indexer indexer = new Indexer();
-    private final Launcher launcher = new Launcher();
+   
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -69,25 +71,17 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.ScoreMiddle()));
-        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+        IntakeButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));//SUBJECT TO CHANGE
+        IntakeButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));//SUBJECT TO CHANGE
 
-        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.ScoreTop()));
-        atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+        OuttakeButton8.onTrue(new InstantCommand(() -> collector.collectorOuttake()));//SUBJECT TO CHANGE
+        OuttakeButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));//SUBJECT TO CHANGE
 
-       atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
+        PivotForward11.onTrue(new InstantCommand(() -> collector.pivotForward()));//SUBJECT TO CHANGE
+        PivotForward11.onFalse(new InstantCommand(() -> collector.pivotStop()));//SUBJECT TO CHANGE
        
+        PivotBack12.onTrue(new InstantCommand(() -> collector.pivotBack()));//SUBJECT TO CHANGE    
+        PivotBack12.onFalse(new InstantCommand(() -> collector.pivotStop()));//SUBJECT TO CHANGE
     }
 
     /**
@@ -97,6 +91,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return null;
     }
 }
