@@ -67,6 +67,12 @@ public final class Constants {
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
 
+        /* Pivot Motor PID Values */
+        public static final double pivotKP = 0;
+        public static final double pivotKI = 0;
+        public static final double pivotKD = 0;
+        public static final double pivotKFF = 0;
+
         /* Angle Motor PID Values */
         // public static final double angleKP = chosenModule.angleKP;
         // public static final double angleKI = chosenModule.angleKI;
