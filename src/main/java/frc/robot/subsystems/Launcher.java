@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -12,17 +14,42 @@ public class Launcher extends PIDSubsystem{
     private CANSparkMax topRoller;
     private CANSparkMax bottomRoller;
 
+    private SparkMaxPIDController launcherPID;
+
+    private RelativeEncoder launcherEncoder;
+
+    private double kP, kI, kD, kIZ, kFF, kMinOutput, kMaxOutput, maxRPM;
+
     public Launcher(){
 
-        super(new PIDController(0.5, 0.001, 0));
+        super(new PIDController(50., 0.001, 0));
 
         getController().setTolerance(0);
 
         topRoller = new CANSparkMax(61, MotorType.kBrushless);
         bottomRoller = new CANSparkMax(62, MotorType.kBrushless);
+
+        launcherPID = topRoller.getPIDController();
+        launcherPID = bottomRoller.getPIDController();
+
+        launcherEncoder = topRoller.getEncoder();
+        launcherEncoder = bottomRoller.getEncoder();
+
+        kIZ = 0.0;
+        kFF = 0.0;
+        kMinOutput = -1.0;
+        kMaxOutput = 1.0;
+        maxRPM = 5700;
+
+        launcherPID.setP(kP);
+        launcherPID.setI(kI);
+        launcherPID.setD(kD);
+        launcherPID.setIZone(kIZ);
+        launcherPID.setFF(kFF);
+        launcherPID.setOutputRange(kMinOutput, kMaxOutput);
     }
 
-    public void launcher(){
+    public void launch(){
         topRoller.setVoltage(6);
         bottomRoller.setVoltage(6);
 
@@ -53,9 +80,9 @@ public class Launcher extends PIDSubsystem{
 
     @Override
     protected double getMeasurement() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getMeasurement'");
     }
+    
 
 
 
