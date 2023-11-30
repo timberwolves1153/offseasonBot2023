@@ -18,10 +18,12 @@ public class Collector {
 
     public Collector() {
 
+        /* Third motor for collector -> motor for singulator */
+
         pivotMotor = new CANSparkMax(41, MotorType.kBrushless);
         rollerMotor = new CANSparkMax(42, MotorType.kBrushless);
 
-      //  pivotEncoder = 
+      
     }
 
     public void collectorIntake() {
