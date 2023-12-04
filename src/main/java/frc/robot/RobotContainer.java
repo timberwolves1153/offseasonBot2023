@@ -30,17 +30,14 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    /* Indexer/Singulator Buttons */
 
-    private final JoystickButton atariJoystickButton2 = new JoystickButton(atari, 2);
-    private final JoystickButton atariJoystickButton3 = new JoystickButton(atari, 3);
-    private final JoystickButton atariJoystickButton7 = new JoystickButton(atari, 7);
-    private final JoystickButton atariJoystickButton8 = new JoystickButton(atari, 8);
-
+    private final JoystickButton forwardIndexer = new JoystickButton(atari, XboxController.Button.kB.value);
+    private final JoystickButton backwardIndexer = new JoystickButton(atari, XboxController.Button.kX.value);
+    
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Collector collector = new Collector();
     private final Indexer indexer = new Indexer();
-    private final Launcher launcher = new Launcher();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -69,25 +66,22 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.ScoreMiddle()));
-        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
-
-        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.ScoreTop()));
-        atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
-
-       atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
-       
+        /* Indexer Buttons */
+        forwardIndexer.whileTrue(new InstantCommand(() -> indexer.runIndexMotor1()));
+        forwardIndexer.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
+        backwardIndexer.whileTrue(new InstantCommand(() -> indexer.reverseIndexMotor1()));
+        backwardIndexer.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
+        forwardIndexer.whileTrue(new InstantCommand(() -> indexer.runIndexMotor2()));
+        forwardIndexer.onFalse(new InstantCommand(() -> indexer.stopIndexMotor2()));
+        backwardIndexer.whileTrue(new InstantCommand(() -> indexer.reverseIndexMotor2()));
+        backwardIndexer.onFalse(new InstantCommand(() -> indexer.stopIndexMotor2()));
+        
+        /* Singulator Buttons */
+        forwardIndexer.whileTrue(new InstantCommand(() -> indexer.singulatorPushIn()));
+        forwardIndexer.onFalse(new InstantCommand(() -> indexer.singulatorStop()));
+        backwardIndexer.whileTrue(new InstantCommand(() -> indexer.singulatorPushout()));
+        backwardIndexer.onFalse(new InstantCommand(() -> indexer.singulatorStop()));
+        
     }
 
     /**
