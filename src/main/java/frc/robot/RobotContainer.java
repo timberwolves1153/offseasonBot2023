@@ -20,7 +20,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick atari = new Joystick(1);
+    private final Joystick operator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -28,13 +28,13 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton IntakeButton7 = new JoystickButton(atari, 7);
-    private final JoystickButton OuttakeButton8 = new JoystickButton(atari, 8);
-    private final JoystickButton PivotForward11 = new JoystickButton(atari, 11);
-    private final JoystickButton PivotBackward12 = new JoystickButton(atari, 12);
+    private final JoystickButton IntakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton OuttakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    private final JoystickButton PivotForward = new JoystickButton(operator,XboxController.Button.kY.value);
+    private final JoystickButton PivotBackward = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -68,17 +68,17 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        IntakeButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
-        IntakeButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        IntakeButton.onTrue(new InstantCommand(() -> collector.collectorIntake()));
+        IntakeButton.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        OuttakeButton8.onTrue(new InstantCommand(() -> collector.collectorOuttake()));
-        OuttakeButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        OuttakeButton.onTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        OuttakeButton.onFalse(new InstantCommand(() -> collector.collectorStop()));
        
-        PivotForward11.onTrue(new InstantCommand(() -> collector.deployMotorForward()));
-        PivotForward11.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
+        PivotForward.onTrue(new InstantCommand(() -> collector.deployMotorForward()));
+        PivotForward.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
 
-        PivotBackward12.onTrue(new InstantCommand(() -> collector.deployMotorBackward()));
-        PivotBackward12.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
+        PivotBackward.onTrue(new InstantCommand(() -> collector.deployMotorBackward()));
+        PivotBackward.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
 
     }
 

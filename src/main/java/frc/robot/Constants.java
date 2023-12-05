@@ -172,4 +172,9 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class IntakeConstants {
+        public static final double encoderTicks = 0; //TUNE THIS
+    }
+
 }
