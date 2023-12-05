@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.lib.util.AxisButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -31,9 +31,9 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     /* Indexer/Singulator Buttons */
-
-    private final JoystickButton forwardIndexer = new JoystickButton(atari, XboxController.Button.kB.value);
-    private final JoystickButton backwardIndexer = new JoystickButton(atari, XboxController.Button.kX.value);
+    
+    private final AxisButton forwardIndexer = new AxisButton(atari, XboxController.Axis.kRightTrigger.value, 0.5);
+    private final AxisButton backwardIndexer = new AxisButton(atari, XboxController.Axis.kLeftTrigger.value, 0.5);
     
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -93,4 +93,5 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         return new exampleAuto(s_Swerve);
     }
+
 }
