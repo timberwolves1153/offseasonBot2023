@@ -10,6 +10,7 @@ public class Indexer {
     private CANSparkMax singulatorMotor;
     /* Asigning Motors */
     public Indexer(){
+        //rename indexer motors when cad is done
         indexMotor1 = new CANSparkMax(51, MotorType.kBrushless);
         indexMotor2 = new CANSparkMax(52, MotorType.kBrushless);
         singulatorMotor = new CANSparkMax(53, MotorType.kBrushless);
