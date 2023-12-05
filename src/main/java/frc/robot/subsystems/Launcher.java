@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-public class Launcher extends PIDSubsystem{
+public class Launcher extends Subsystem{
 
     private CANSparkMax topRoller;
     private CANSparkMax bottomRoller;
@@ -22,7 +22,7 @@ public class Launcher extends PIDSubsystem{
 
     public Launcher(){
 
-        super(new PIDController(50., 0.001, 0));
+        PIDController(50., 0.001, 0);
 
         getController().setTolerance(0);
 
@@ -52,13 +52,19 @@ public class Launcher extends PIDSubsystem{
     public void launch(){
         topRoller.setVoltage(6);
         bottomRoller.setVoltage(6);
-
     }
     public void stopLauncher(){
         topRoller.setVoltage(0);
         bottomRoller.setVoltage(0);
-
     }
+
+    public void setLauncherSetpoint(double maxRPM){
+        this.maxRPM = maxRPM;
+        topRoller.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
+        bottomRoller.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
+    }
+
+    
 
     public void configLauncherMotors() {
         topRoller.restoreFactoryDefaults();
@@ -71,20 +77,4 @@ public class Launcher extends PIDSubsystem{
         bottomRoller.setInverted(false);
         bottomRoller.burnFlash();
     }
-
-    @Override
-    protected void useOutput(double output, double setpoint) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    protected double getMeasurement() {
-        throw new UnsupportedOperationException("Unimplemented method 'getMeasurement'");
-    }
-    
-
-
-
-    
 }
