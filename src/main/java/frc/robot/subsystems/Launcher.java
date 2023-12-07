@@ -8,13 +8,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Launcher extends Subsystem{
+public class Launcher extends SubsystemBase{
 
     private CANSparkMax topRoller;
     private CANSparkMax bottomRoller;
 
-    private SparkMaxPIDController launcherPID;
+    private SparkMaxPIDController topLauncherPID;
+    private SparkMaxPIDController bottomLauncherPID;
+
 
     private RelativeEncoder launcherEncoder;
 
@@ -22,15 +25,11 @@ public class Launcher extends Subsystem{
 
     public Launcher(){
 
-        PIDController(50., 0.001, 0);
-
-        getController().setTolerance(0);
-
         topRoller = new CANSparkMax(61, MotorType.kBrushless);
         bottomRoller = new CANSparkMax(62, MotorType.kBrushless);
 
-        launcherPID = topRoller.getPIDController();
-        launcherPID = bottomRoller.getPIDController();
+        topLauncherPID = topRoller.getPIDController();
+        bottomLauncherPID = bottomRoller.getPIDController();
 
         launcherEncoder = topRoller.getEncoder();
         launcherEncoder = bottomRoller.getEncoder();
@@ -41,12 +40,19 @@ public class Launcher extends Subsystem{
         kMaxOutput = 1.0;
         maxRPM = 5700;
 
-        launcherPID.setP(kP);
-        launcherPID.setI(kI);
-        launcherPID.setD(kD);
-        launcherPID.setIZone(kIZ);
-        launcherPID.setFF(kFF);
-        launcherPID.setOutputRange(kMinOutput, kMaxOutput);
+        topLauncherPID.setP(kP);
+        topLauncherPID.setI(kI);
+        topLauncherPID.setD(kD);
+        topLauncherPID.setIZone(kIZ);
+        topLauncherPID.setFF(kFF);
+        topLauncherPID.setOutputRange(kMinOutput, kMaxOutput);
+
+        bottomLauncherPID.setP(kP);
+        bottomLauncherPID.setI(kI);
+        bottomLauncherPID.setD(kD);
+        bottomLauncherPID.setIZone(kIZ);
+        bottomLauncherPID.setFF(kFF);
+        bottomLauncherPID.setOutputRange(kMinOutput, kMaxOutput);
     }
 
     public void launch(){
@@ -60,8 +66,8 @@ public class Launcher extends Subsystem{
 
     public void setLauncherSetpoint(double maxRPM){
         this.maxRPM = maxRPM;
-        topRoller.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
-        bottomRoller.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
+        topLauncherPID.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
+        bottomLauncherPID.setReference(maxRPM, CANSparkMax.ControlType.kVoltage);
     }
 
     

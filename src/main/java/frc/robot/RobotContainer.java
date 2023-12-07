@@ -38,8 +38,8 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Collector collector = new Collector();
-    private final Indexer indexer = new Indexer();
+    // private final Collector collector = new Collector();
+    // private final Indexer indexer = new Indexer();
     private final Launcher launcher = new Launcher();
 
 
@@ -69,23 +69,20 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.ScoreMiddle()));
-        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.launch()));
+        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.stopLauncher()));
 
-        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.ScoreTop()));
-        atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+    //    atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
+    //    atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-       atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+    //    atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
+    //    atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
 
-       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+    //    atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
+    //    atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-       atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
+    //    atariJoystickButton8.onTrue(new InstantCommand(() -> indexer.indexerReject()));
+    //    atariJoystickButton8.onFalse(new InstantCommand(() -> indexer.indexerStop()));
 
        
     }
