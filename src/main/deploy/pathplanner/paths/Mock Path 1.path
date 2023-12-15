@@ -1,0 +1,99 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.891424501425165,
+        "y": 1.5591168091204737
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 9.89142450142516,
+        "y": 1.0591168091204735
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 5.6478347578354215,
+        "y": 0.44658119658486045
+      },
+      "prevControl": {
+        "x": 4.6478347578354215,
+        "y": 1.4465811965848614
+      },
+      "nextControl": {
+        "x": 6.6478347578354215,
+        "y": -0.5534188034151397
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 7.0,
+        "y": 1.0
+      },
+      "prevControl": {
+        "x": 6.75,
+        "y": 2.5
+      },
+      "nextControl": {
+        "x": 7.25,
+        "y": -0.5
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 5.6478347578354215,
+        "y": 0.44658119658486045
+      },
+      "prevControl": {
+        "x": 5.798632478633142,
+        "y": -0.2970085470048832
+      },
+      "nextControl": null,
+      "isLocked": false
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect 3 balls",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Collect"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Index"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null
+}

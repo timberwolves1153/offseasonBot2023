@@ -56,9 +56,9 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean(), 
-                leftBumper,
-                rightBumper
+                () -> robotCentric.getAsBoolean(),
+                rightBumper,
+                leftBumper
             )
         );
 
