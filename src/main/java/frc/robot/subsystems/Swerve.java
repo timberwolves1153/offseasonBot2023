@@ -9,10 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,19 +43,6 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-        // Drive base radius needs to be configured
-        AutoBuilder.configureHolonomic(
-            this::getPose, 
-            this::resetOdometry, 
-            this::getRobotRelativeSpeeds, 
-            this::driveRobotRelative, 
-            new HolonomicPathFollowerConfig(
-                new PIDConstants(3, 0, 0), 
-                new PIDConstants(3, 0, 0), 
-                3.81, 
-                0, 
-                new ReplanningConfig()), 
-                this);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -83,20 +66,6 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }    
-
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return Constants.Swerve.swerveKinematics.toChassisSpeeds(getStates());
-    }
-
-    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-        var states = Constants.Swerve.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
-
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.maxSpeed);
-    }
-
-    public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-        ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation());
-    }
 
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
@@ -126,8 +95,6 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    
-
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? 
         Rotation2d.fromDegrees(360 - gyro.getYaw()) : 
@@ -145,7 +112,7 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.update(getYaw(), getModulePositions());  
 
         for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " absoluteEncoder", mod.getAbsoluteEncoder().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " absoluteEncoderPorts", mod.getAbsoluteEncoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
