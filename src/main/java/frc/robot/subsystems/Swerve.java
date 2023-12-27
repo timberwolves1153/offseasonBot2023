@@ -54,12 +54,13 @@ public class Swerve extends SubsystemBase {
             this::getRobotRelativeSpeeds, 
             this::driveRobotRelative, 
             new HolonomicPathFollowerConfig(
-                new PIDConstants(3, 0, 0), 
-                new PIDConstants(3, 0, 0), 
-                3.81, 
-                0, 
+                new PIDConstants(5, 0, 0), 
+                new PIDConstants(5, 0, 0), 
+                4.5, 
+                0.381, 
                 new ReplanningConfig()), 
-                this);
+            this);
+        
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -89,13 +90,18 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+
         var states = Constants.Swerve.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(getStates(), Constants.Swerve.maxSpeed);
+
+        setModuleStates(states);
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
         ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation());
+
+        driveRobotRelative(robotRelative);
     }
 
     public Pose2d getPose() {
