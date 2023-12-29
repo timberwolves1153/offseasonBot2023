@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.lib.util.AxisButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -31,16 +32,25 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kRightStick.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton rightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton leftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton driveRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driveLeftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton atariJoystickButton2 = new JoystickButton(operator, 2);
-    private final JoystickButton atariJoystickButton3 = new JoystickButton(operator, 3);
-    private final JoystickButton atariJoystickButton7 = new JoystickButton(operator, 7);
-    private final JoystickButton atariJoystickButton8 = new JoystickButton(operator, 8);
-    private final JoystickButton atariJoystickButton11 = new JoystickButton(operator, 11);
-    private final JoystickButton atariJoystickButton12 = new JoystickButton(operator, 12);
+    private final AxisButton leftTrigger = new AxisButton(operator, XboxController.Axis.kLeftTrigger.value, 0.5);
+    private final AxisButton rightTrigger = new AxisButton(operator, XboxController.Axis.kRightTrigger.value, 0.5);
 
+    private final JoystickButton opLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton opRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+
+    private final JoystickButton opY = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton opA = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton opX = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton opB = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final POVButton DownDPad = new POVButton(operator, 180);
+    private final POVButton UpDPad = new POVButton(operator, 0);
+
+    //private final JoystickButton OP = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+
+    
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Collector collector = new Collector();
@@ -56,9 +66,7 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean(),
-                rightBumper,
-                leftBumper
+                () -> robotCentric.getAsBoolean()
             )
         );
 
@@ -75,40 +83,54 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-// to score low, we might just want to poop cubes out of the feeder/indexer
-        atariJoystickButton2.onTrue(new InstantCommand(() -> launcher.scoreL2()));
-        atariJoystickButton2.onFalse(new InstantCommand(() -> launcher.launcherStop()));
 
-        atariJoystickButton3.onTrue(new InstantCommand(() -> launcher.scoreL3()));
-        atariJoystickButton3.onFalse(new InstantCommand(() -> launcher.launcherStop()));
+        opA.onTrue(new InstantCommand(() -> collector.deployMotorForward()));
+        opA.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
 
-       atariJoystickButton7.onTrue(new InstantCommand(() -> collector.collectorIntake()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        opLeftBumper.onTrue(new InstantCommand(() -> collector.collectorIntake()));
+        opLeftBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-    //    atariJoystickButton7.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
-    //    atariJoystickButton7.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
-    
-       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerCollect()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
-       atariJoystickButton8.onTrue(new InstantCommand(() -> collector.collectorOutake()));
-       atariJoystickButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
-
-       atariJoystickButton7.onTrue(new InstantCommand(() -> indexer.indexerReject()));
-       atariJoystickButton7.onFalse(new InstantCommand(() -> indexer.indexerStop()));
-
-    //    atariJoystickButton8.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
-    //    atariJoystickButton8.onFalse(Commands.runOnce(() -> collector.retractIntake(), collector));
-
-       atariJoystickButton12.onTrue(new InstantCommand(() -> collector.runIntakeDeployForward()));
-       atariJoystickButton12.onFalse(new InstantCommand(() -> collector.stopIntake()));
-
-       atariJoystickButton11.onTrue(new InstantCommand(() -> collector.runIntakeDeployBackward()));
-       atariJoystickButton11.onFalse(new InstantCommand(() -> collector.stopIntake()));
+        leftTrigger.onTrue(new InstantCommand(() -> indexer.runIndexMotor1()));
+        leftTrigger.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
 
 
+        opX.onTrue(new InstantCommand(() -> collector.deployMotorBackward()));
+        opX.onFalse(new InstantCommand(() -> collector.deployMotorStop()));
+
+        opRightBumper.onTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+        rightTrigger.onTrue(new InstantCommand(() -> indexer.reverseIndexMotor1()));
+        rightTrigger.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
+
+       // opY.onTrue(new InstantCommand(() -> launcher.setLauncherSetpoint(0, 0)));
+
+       opY.onTrue(new InstantCommand(() -> launcher.runLauncher()));
+       opY.onFalse(new InstantCommand(() -> launcher.stopLauncher()));
+
+       UpDPad.onTrue(new InstantCommand(() -> indexer.indexslow()));
+       UpDPad.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
+
+       DownDPad.onTrue(new InstantCommand(() -> indexer.reverseindexslow()));
+       DownDPad.onFalse(new InstantCommand(() -> indexer.stopIndexMotor1()));
+       
+        // change to setting setpoints later
+       
+        // UpDPad.onTrue(Commands.runOnce(() -> collector.retractIntake(), collector));
+        // DownDPad.onTrue(Commands.runOnce(() -> collector.deployIntake(), collector));
+        // opB.onTrue(new InstantCommand(() -> collector.resetPivotEncoder()));
+
+        
        
     }
+
+    public Collector getCollector() {
+        return collector;
+    }
+
+    public Joystick getDriveController(){
+        return driver;
+      }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

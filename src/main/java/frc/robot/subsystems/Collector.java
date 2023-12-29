@@ -1,137 +1,188 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.DeployIntakeConstants;
 
 public class Collector extends SubsystemBase{
     
+    private CANSparkMax pivotMotor;
     private CANSparkMax rollerMotor;
-    private CANSparkMax deployMotor;
-    private LinearFilter currentFilter;
+    private RelativeEncoder pivotEncoder;
+    private SparkMaxPIDController pidController;
 
+    public double kP, kI, kD, kFF, kMaxOutput, kMinOutput, kInput, maxRPM;
+    //public final double kp = 0.001;
 
-    public Collector () {
-        rollerMotor = new CANSparkMax(41, MotorType.kBrushless);
-        deployMotor = new CANSparkMax(42, MotorType.kBrushless);
-        
+    private final double IntakeSetpoint = -13.00;
+    private PIDController pivotPID;
 
-        currentFilter = LinearFilter.movingAverage(10);
+    public Collector() {
+        //super(new PIDController(0.01, 0, 0));
+        pivotMotor = new CANSparkMax(41, MotorType.kBrushless);
+        rollerMotor = new CANSparkMax(42, MotorType.kBrushless);
 
-        
-        configDeployMotor();
-        configRollerMotor();
+        //pivotPID = new PIDController(kP, kI, kD);
+
+        pivotMotor.restoreFactoryDefaults();    
+
+        pidController = pivotMotor.getPIDController();
+
+        pivotEncoder = pivotMotor.getEncoder();
+
+        kP = 0.01;
+        kI = 0;
+        kD = 0;
+        kFF = 0;
+        kMaxOutput = 1;
+        kMinOutput = -1;
+
+        // pidController.setP(kP);
+        // pidController.setI(kI);
+        // pidController.setD(kD);
+        // pidController.setFF(kFF);
+        // pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+        SmartDashboard.putNumber("Collector P Gain", kP);
+        //SmartDashboard.putNumber("D Gain", kD);
+        //SmartDashboard.putNumber("I Gain", kI);
+        SmartDashboard.putNumber("Feed Forward", kFF);
+        SmartDashboard.putNumber("Minimum Output", kMinOutput);
+        SmartDashboard.putNumber("Maximum Output", kMaxOutput);
     }
 
-    public double getUnfilteredDeployMotorCurrent() {
-        return deployMotor.getOutputCurrent();
-    }
-
-    public double getFilteredDeployMotorCurrent() {
-        return currentFilter.calculate(getUnfilteredDeployMotorCurrent());
-    }
-
-    public double getDeployEncoderPosition() {
-        return deployMotor.getEncoder().getPosition();
-    }
-
-    //runs rollers to collect cubes
     public void collectorIntake() {
-        rollerMotor.setVoltage(6);
+        rollerMotor.setVoltage(-8);
     }
 
-
-    //runs rollers to spit out cubes
-    public void collectorOutake() {
-        rollerMotor.setVoltage(-6);
+    public void collectorOuttake() {
+        rollerMotor.setVoltage(8);
+        
     }
-    //stops rollers from moving
+
     public void collectorStop() {
-        rollerMotor.setVoltage(0.0);
+        rollerMotor.setVoltage(0);
     }
 
-    //purpose: to test directionality of deploy motor & see intake move w/ basic controls
-    public void runIntakeDeployForward() {
-        deployMotor.setVoltage(2);//rollerMotor => deployMotor
+    public void deployMotorForward() {
+        pivotMotor.setVoltage(-1);
     }
 
-    //purpose: to test directionality of deploy motor & see intake move w/ basic controls
-    public void runIntakeDeployBackward() {
-        deployMotor.setVoltage(-2);//rollerMotor => deployMotor
+    public void deployMotorBackward() {
+        pivotMotor.setVoltage(1);
     }
 
-    //purpose: to test directionality of deploy motor & see intake move w/ basic controls
-    public void stopIntake() {
-        deployMotor.setVoltage(0.0);//rollerMotor => deployMotor
+    public void deployMotorStop() {
+        pivotMotor.setVoltage(0.25);
     }
 
-    public void setDeployMotorPosition(double position) {
-        deployMotor.getPIDController().setReference(position, ControlType.kSmartMotion);
+    public double getPivotEncoder() {
+        return pivotEncoder.getPosition();
     }
 
-    public void deployIntake() {
-        // NEED to find Garth's extension point - HINT: it is not the current value
-        deployMotor.getPIDController().setReference(DeployIntakeConstants.extensionPoint, ControlType.kSmartMotion);
+    public void resetPivotEncoder() {
+        pivotEncoder.setPosition(0);
     }
 
-    public void retractIntake() {
-        // NEED to find Garth's extension point - HINT: it is not the current value
-        this.setDeployMotorPosition(getDeployEncoderPosition() - DeployIntakeConstants.extensionPoint);
-    }
-
-    public void zeroDeployMotor() {
-        deployMotor.getEncoder().setPosition(0);
-    }
-
-    @Override 
+    @Override
     public void periodic() {
 
-        if (Constants.collectorTuningMode) {
-            SmartDashboard.putNumber("Deploy Motor Position", getDeployEncoderPosition());
-            SmartDashboard.putNumber("Deploy Motor unfiltered Current", getUnfilteredDeployMotorCurrent());
-            SmartDashboard.putNumber("Deploy Motor Filtered Current", getFilteredDeployMotorCurrent());
-            }
+        double p = SmartDashboard.getNumber("Intake P value", 0);
+       // double i = SmartDashboard.getNumber("I Gain", 0);
+       // double d = SmartDashboard.getNumber("D Gain", 0);
+        double ff = SmartDashboard.getNumber("Intake FF", 0);
+        SmartDashboard.putNumber("intake enocder", getPivotEncoder());
+        // double min = SmartDashboard.getNumber("MinOutput", 0);
+        // double max = SmartDashboard.getNumber("MaxOutput", 0);
+
+        if (p != kP) {
+            pidController.setP(kP = p);
+        }
+
+        // if (i != kI) {
+        //     pidController.setI(kI = i);
+        // }
+
+        // if (d != kD) {
+        //     pidController.setD(kD = d);
+        // }
+
+        if (ff != kFF) {
+            pidController.setFF(kFF = ff);
+        }
+
+        // if (min != kMinOutput) {
+        //     pidController.setOutputRange(min, max);
+        //     kMinOutput = min;
+        //     kMaxOutput = max;
+        // }
+
+        // if  (max != kMaxOutput) {
+        //     pidController.setOutputRange(min, max);
+        //     kMinOutput = min;
+        //     kMaxOutput = max;
+        // }
     }
 
-    public void configDeployMotor() {
-        deployMotor.restoreFactoryDefaults();
-        deployMotor.setIdleMode(IdleMode.kCoast);
-        deployMotor.setInverted(false);
-        deployMotor.setSmartCurrentLimit(DeployIntakeConstants.ExtensionCurrentLimit);
-        
-        deployMotor.getPIDController().setSmartMotionMaxVelocity(
-            DeployIntakeConstants.smartMotionMaxVelocity, 0);
-
-        deployMotor.getPIDController().setSmartMotionMaxAccel(
-            DeployIntakeConstants.smartmotionMaxAccel, 0);
-
-        deployMotor.getPIDController().setSmartMotionAllowedClosedLoopError(
-            DeployIntakeConstants.smartMotionAllowableError, 0);
-
-        deployMotor.getPIDController().setSmartMotionMinOutputVelocity(0, 0);
-
-        // 2713 had a p-gain of 0, why?
-        deployMotor.getPIDController().setP(0);
-        deployMotor.getPIDController().setFF(0.02);
-
-        deployMotor.getEncoder().setPositionConversionFactor(DeployIntakeConstants.deployMotorGearRatio);
-        deployMotor.getEncoder().setVelocityConversionFactor(DeployIntakeConstants.deployMotorGearRatio);
-
-        deployMotor.burnFlash();
+    public void setPivotToCoast() {
+        pivotMotor.setIdleMode(IdleMode.kCoast);
     }
 
-    public void configRollerMotor() {
+    public void setPivotToBrake() {
+        pivotMotor.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void configCollector() {
+        pivotMotor.restoreFactoryDefaults();    
+        pivotMotor.setIdleMode(IdleMode.kBrake);
+        pivotMotor.setInverted(false);
+        pivotMotor.burnFlash();
+
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setIdleMode(IdleMode.kCoast);
-        rollerMotor.setInverted(true);
+        rollerMotor.setInverted(false);
         rollerMotor.burnFlash();
     }
+
+    // @Override
+    // protected void useOutput(double output, double setpoint) {
+    //     // TODO Auto-generated method stub
+    //    collectorMove(output);
+    //    resetPivotEncoder();
+    //    setSetpoint(0);
+    //    getController().reset();
+    // }
+
+    // @Override
+    // protected double getMeasurement() {
+    //     // TODO Auto-generated method stub
+    //     return pivotEncoder.getPosition();
+    // }
+
+    public void collectorMove(double volts){
+        double clampedVolts = MathUtil.clamp(volts, -12, 12);
+        pivotMotor.setVoltage(clampedVolts);
+    }
+
+    // public void deployIntake() {
+    //     setSetpoint(IntakeSetpoint);
+    //     getController().reset();
+    //     enable();
+    // }
+
+    // public void retractIntake() {
+    //     setSetpoint(IntakeSetpoint - IntakeSetpoint);
+    //     getController().reset();
+    //     enable();
+    // }
+
 }

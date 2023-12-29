@@ -53,7 +53,14 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (m_robotContainer.getDriveController().getRawButton(1)) {
+    m_robotContainer.getCollector().setPivotToCoast();
+
+    } else {
+      m_robotContainer.getCollector().setPivotToBrake();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

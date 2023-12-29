@@ -3,26 +3,38 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+public class Indexer {
 
-public class Indexer extends SubsystemBase {
-    public CANSparkMax indexer;
-
-    public Indexer() {
-        indexer = new CANSparkMax(51, MotorType.kBrushless);
-
-        
-        indexer.setInverted(true);
-    }
-    public void indexerCollect () {
-        indexer.setVoltage(6);
+    private CANSparkMax indexMotor1;
+    private CANSparkMax indexMotor2;
+    /* Asigning Motors */
+    public Indexer(){
+        //rename indexer motors when cad is done
+        indexMotor1 = new CANSparkMax(51, MotorType.kBrushless);
     }
 
-    public void indexerReject () {
-        indexer.setVoltage(-6);
+
+    /* Index Motor 1 Motion Control */
+    public void runIndexMotor1(){
+        indexMotor1.setVoltage(8);
     }
 
-    public void indexerStop () {
-        indexer.setVoltage(0);
+    public void stopIndexMotor1(){
+        indexMotor1.setVoltage(0);
     }
+
+    public void reverseIndexMotor1(){
+        indexMotor1.setVoltage(-8);
+    }
+
+    public void indexslow(){
+        indexMotor1.setVoltage(1);
+    }
+
+    public void reverseindexslow(){
+        indexMotor1.setVoltage(-1);
+    }
+
+
+   
 }
