@@ -24,16 +24,10 @@ public class Collector extends SubsystemBase{
     //public final double kp = 0.001;
 
     private final double IntakeSetpoint = -13.00;
-    private PIDController pivotPID;
 
     public Collector() {
-        //super(new PIDController(0.01, 0, 0));
         pivotMotor = new CANSparkMax(41, MotorType.kBrushless);
         rollerMotor = new CANSparkMax(42, MotorType.kBrushless);
-
-        //pivotPID = new PIDController(kP, kI, kD);
-
-        pivotMotor.restoreFactoryDefaults();    
 
         pidController = pivotMotor.getPIDController();
 
@@ -46,18 +40,14 @@ public class Collector extends SubsystemBase{
         kMaxOutput = 1;
         kMinOutput = -1;
 
-        // pidController.setP(kP);
-        // pidController.setI(kI);
-        // pidController.setD(kD);
-        // pidController.setFF(kFF);
-        // pidController.setOutputRange(kMinOutput, kMaxOutput);
-
         SmartDashboard.putNumber("Collector P Gain", kP);
         //SmartDashboard.putNumber("D Gain", kD);
         //SmartDashboard.putNumber("I Gain", kI);
         SmartDashboard.putNumber("Feed Forward", kFF);
         SmartDashboard.putNumber("Minimum Output", kMinOutput);
         SmartDashboard.putNumber("Maximum Output", kMaxOutput);
+
+        configCollector();
     }
 
     public void collectorIntake() {
@@ -91,6 +81,14 @@ public class Collector extends SubsystemBase{
 
     public void resetPivotEncoder() {
         pivotEncoder.setPosition(0);
+    }
+
+    public void deployIntake() {
+        pidController.setReference(IntakeSetpoint, ControlType.kPosition);
+    }
+
+    public void retractIntake() {
+        pidController.setReference(IntakeSetpoint - IntakeSetpoint, ControlType.kPosition);
     }
 
     @Override
@@ -147,42 +145,14 @@ public class Collector extends SubsystemBase{
         pivotMotor.setInverted(false);
         pivotMotor.burnFlash();
 
+        pidController.setP(kP);
+        pidController.setI(kI);
+        pidController.setD(kD);
+
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setIdleMode(IdleMode.kCoast);
         rollerMotor.setInverted(false);
         rollerMotor.burnFlash();
     }
-
-    // @Override
-    // protected void useOutput(double output, double setpoint) {
-    //     // TODO Auto-generated method stub
-    //    collectorMove(output);
-    //    resetPivotEncoder();
-    //    setSetpoint(0);
-    //    getController().reset();
-    // }
-
-    // @Override
-    // protected double getMeasurement() {
-    //     // TODO Auto-generated method stub
-    //     return pivotEncoder.getPosition();
-    // }
-
-    public void collectorMove(double volts){
-        double clampedVolts = MathUtil.clamp(volts, -12, 12);
-        pivotMotor.setVoltage(clampedVolts);
-    }
-
-    // public void deployIntake() {
-    //     setSetpoint(IntakeSetpoint);
-    //     getController().reset();
-    //     enable();
-    // }
-
-    // public void retractIntake() {
-    //     setSetpoint(IntakeSetpoint - IntakeSetpoint);
-    //     getController().reset();
-    //     enable();
-    // }
 
 }

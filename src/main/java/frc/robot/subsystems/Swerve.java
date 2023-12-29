@@ -132,8 +132,6 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    
-
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? 
         Rotation2d.fromDegrees(360 - gyro.getYaw()) : 
@@ -151,7 +149,7 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.update(getYaw(), getModulePositions());  
 
         for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " absoluteEncoder", mod.getAbsoluteEncoder().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " absoluteEncoderPorts", mod.getAbsoluteEncoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
