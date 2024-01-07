@@ -43,6 +43,9 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        // Drive base radius needs to be configured
+
+        
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -66,6 +69,25 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }    
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(getStates());
+    }
+
+    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+
+        var states = Constants.Swerve.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(getStates(), Constants.Swerve.maxSpeed);
+
+        setModuleStates(states);
+    }
+
+    public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+        ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation());
+
+        driveRobotRelative(robotRelative);
+    }
 
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
